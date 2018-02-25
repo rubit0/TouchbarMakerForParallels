@@ -25,13 +25,10 @@ namespace TouchbarMaker.Tools
             {
                 case ".png":
                     return new PngBitmapEncoder();
-                    break;
                 case ".jpg":
                     return new JpegBitmapEncoder();
-                    break;
                 case ".jpeg":
                     return new JpegBitmapEncoder();
-                    break;
                 default:
                     return new BmpBitmapEncoder();
             }

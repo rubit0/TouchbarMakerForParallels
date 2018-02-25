@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchbarMaker", "TouchbarMaker\TouchbarMaker.csproj", "{12AB3062-5B61-4BCE-A827-17D7596E83FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchbarMaker.Core", "TouchbarMaker.Core\TouchbarMaker.Core.csproj", "{8E26E7ED-3F26-478D-963C-CB8F26CADC06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12AB3062-5B61-4BCE-A827-17D7596E83FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12AB3062-5B61-4BCE-A827-17D7596E83FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12AB3062-5B61-4BCE-A827-17D7596E83FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12AB3062-5B61-4BCE-A827-17D7596E83FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E26E7ED-3F26-478D-963C-CB8F26CADC06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E26E7ED-3F26-478D-963C-CB8F26CADC06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E26E7ED-3F26-478D-963C-CB8F26CADC06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E26E7ED-3F26-478D-963C-CB8F26CADC06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02E06C38-4FFE-4868-9092-A317B0F3AA20}
+	EndGlobalSection
+EndGlobal

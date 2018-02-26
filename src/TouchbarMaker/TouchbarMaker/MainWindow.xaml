@@ -5,8 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TouchbarMaker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Content="Load Icon" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="Button_Click"/>
+        Title="Touchbar Maker for Parallels" Height="600" Width="800" MinWidth="600">
+    <Grid Margin="10 0 10 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="20" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="10*" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="New"/>
+                <Button Content="Load"/>
+                <TextBlock>App Name:</TextBlock>
+                <TextBox>notepad.exe</TextBox>
+            </StackPanel>
+        </Grid>
+
+        <Separator Grid.Row="1" />
+
+        <Grid Grid.Row="2" Margin="0 5 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <ToolBarTray DockPanel.Dock="Top" AllowDrop="False" IsLocked="True">
+                    <ToolBar>
+                        <Button >Add</Button>
+                        <Button >Remove</Button>
+                    </ToolBar>
+                </ToolBarTray>
+                <TreeView>
+                </TreeView>
+            </DockPanel>
+
+            <!--Here some custom editor by the selected item in the treeview-->
+        </Grid>
     </Grid>
 </Window>

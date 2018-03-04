@@ -52,6 +52,8 @@
                     <Label>Element Information:</Label>
                     <Label Content="{Binding SelectedElementNode.Content.Id}" />
                     <Label Content="{Binding SelectedElementNode.Content.Name}" />
+                    <Image x:Name="Image" Height="60" Width="60" Source="{Binding SelectedElementNode.Content.Icon}" />
+                    <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}">Load Icon</Button>
                 </StackPanel>
             </Grid>
         </Grid>

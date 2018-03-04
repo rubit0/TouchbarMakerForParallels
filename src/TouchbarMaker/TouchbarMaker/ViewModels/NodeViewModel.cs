@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TouchbarMaker.ViewModels
 {
-    public class NodeViewModel
+    public class NodeViewModel : INotifyPropertyChanged
     {
         public enum ElementType
         {
@@ -11,7 +13,17 @@ namespace TouchbarMaker.ViewModels
             Element
         }
 
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ElementType Type { get; set; }
         public NodeViewModel Parent { get; set; }
         public ObservableCollection<NodeViewModel> Elements { get; set; } = new ObservableCollection<NodeViewModel>();
@@ -19,8 +31,14 @@ namespace TouchbarMaker.ViewModels
 
         public NodeViewModel()
         {
-            Content = new ElementViewModel();
-            Content.Name = "ABC";
+            Content = new ElementViewModel {Name = "ABC"};
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -3,8 +3,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using Microsoft.Win32;
+using TouchbarMaker.Core;
 
 namespace TouchbarMaker.ViewModels
 {
@@ -18,6 +22,7 @@ namespace TouchbarMaker.ViewModels
         public ICommand AddContainerCommand { get; set; }
         public ICommand AddElementCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
+        public ICommand AddElementIconCommand { get; set; }
 
         private TreeView _treeView;
 
@@ -31,7 +36,8 @@ namespace TouchbarMaker.ViewModels
 
                 AddContainerCommand.CanExecute(sender);
                 AddElementCommand.CanExecute(sender);
-                RemoveElementCommand.CanExecute(sender); 
+                RemoveElementCommand.CanExecute(sender);
+                AddElementIconCommand.CanExecute(sender);
             };
 
             TreeElements = new ObservableCollection<NodeViewModel>
@@ -130,38 +136,36 @@ namespace TouchbarMaker.ViewModels
                 var selected = _treeView.SelectedItem as NodeViewModel;
                 return !(selected == null || selected.Type == NodeViewModel.ElementType.Root);
             });
-        }
-    }
 
-    public class Commander : ICommand
-    {
-        public bool CanExecute(object parameter)
-        {
-            var result = _canExecuteAction.Invoke(parameter);
-            if (_canExecute != result)
+            AddElementIconCommand = new Commander(o =>
             {
-                _canExecute = result;
-                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-            }
+                var fileDialog = new OpenFileDialog
+                {
+                    Title = "Select a picture",
+                    Filter = "All supported graphics|*.jpg;*.jpeg;*.png;*.bmp|" +
+                             "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                             "Portable Network Graphic (*.png)|*.png"
+                };
 
-            return _canExecute;
-        }
+                if (fileDialog.ShowDialog() == true)
+                {
+                    var image = new BitmapImage(new Uri(fileDialog.FileName));
 
-        public void Execute(object parameter)
-        {
-            _execute.Invoke(parameter);
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool> _canExecuteAction;
-        private bool _canExecute;
-
-        public Commander(Action<object> execute, Func<object, bool> canExecuteAction)
-        {
-            _execute = execute;
-            _canExecuteAction = canExecuteAction;
+                    if (!image.IsAcceptedIconSize())
+                    {
+                        MessageBox.Show("The image has a bad format.");
+                    }
+                    else
+                    {
+                        var selected = _treeView.SelectedItem as NodeViewModel;
+                        selected.Content.Icon = image;
+                    }
+                }
+            }, o =>
+            {
+                var selected = _treeView.SelectedItem as NodeViewModel;
+                return selected != null && selected.Type != NodeViewModel.ElementType.Root;
+            });
         }
     }
 }

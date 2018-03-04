@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Media;
 
 namespace TouchbarMaker.Core
 {
@@ -28,6 +29,16 @@ namespace TouchbarMaker.Core
         public static bool IsAcceptedIconSize(this Bitmap image)
         {
             return IsAcceptedIconSize(image.Height, image.Width);
+        }
+
+        /// <summary>
+        /// Check if the image has the accepted touchbar icon size
+        /// </summary>
+        /// <param name="image">Target image</param>
+        /// <returns>Is accapted size?</returns>
+        public static bool IsAcceptedIconSize(this ImageSource image)
+        {
+            return IsAcceptedIconSize((int)image.Height, (int)image.Width);
         }
 
         /// <summary>

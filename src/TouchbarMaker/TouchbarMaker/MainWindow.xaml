@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TouchbarMaker"
+        xmlns:models="clr-namespace:TouchbarMaker.ViewModels"
         mc:Ignorable="d"
         Title="Touchbar Maker for Parallels" Height="600" Width="800" MinWidth="600">
     <Grid Margin="10 0 10 10">
@@ -17,8 +18,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button Content="New"/>
                 <Button Content="Load"/>
-                <TextBlock>App Name:</TextBlock>
-                <TextBox>notepad.exe</TextBox>
+                <TextBlock Text="{Binding ApplicationName}" />
             </StackPanel>
         </Grid>
 
@@ -33,15 +33,27 @@
             <DockPanel Grid.Column="0">
                 <ToolBarTray DockPanel.Dock="Top" AllowDrop="False" IsLocked="True">
                     <ToolBar>
-                        <Button >Add</Button>
-                        <Button >Remove</Button>
+                        <Button Command="{Binding AddContainerCommand}" >AddContainer</Button>
+                        <Button Command="{Binding AddElementCommand}" >Add Element</Button>
+                        <Button Command="{Binding RemoveElementCommand}" >Remove</Button>
                     </ToolBar>
                 </ToolBarTray>
-                <TreeView>
+                <TreeView x:Name="TreeView" ItemsSource="{Binding TreeElements}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Elements}" DataType="{x:Type models:NodeViewModel}" >
+                            <Label Content="{Binding Name}"/>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
                 </TreeView>
             </DockPanel>
 
-            <!--Here some custom editor by the selected item in the treeview-->
+            <Grid Grid.Column="1">
+                <StackPanel>
+                    <Label>Element Information:</Label>
+                    <Label Content="{Binding SelectedElementNode.Content.Id}" />
+                    <Label Content="{Binding SelectedElementNode.Content.Name}" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

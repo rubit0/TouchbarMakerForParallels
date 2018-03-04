@@ -12,9 +12,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using TouchbarMaker.Core;
+using TouchbarMaker.ViewModels;
 
 namespace TouchbarMaker
 {
@@ -23,9 +23,14 @@ namespace TouchbarMaker
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainViewModel MainViewModel { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            MainViewModel = new MainViewModel(TreeView) {ApplicationName = "devenv.exe"};
+
+            DataContext = MainViewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -17,10 +17,12 @@ namespace TouchbarMaker.Views
             MainViewModel = new MainViewModel {ApplicationName = "devenv.exe"};
             DataContext = MainViewModel;
             MainViewModel.PropertyChanged += MainViewModelOnPropertyChanged;
+
             TreeView.SelectedItemChanged += (sender, args) =>
             {
                 MainViewModel.SelectedElementNode = TreeView.SelectedItem as NodeViewModel;
             };
+
             TreeView.MouseDoubleClick += (sender, args) =>
             {
                 var dialog = new ChangeNameDialog(MainViewModel.SelectedElementNode.Name);
@@ -32,14 +34,21 @@ namespace TouchbarMaker.Views
             NodeContentDisplay.Visibility = Visibility.Hidden;
         }
 
-        private void MainViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void MainViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (propertyChangedEventArgs.PropertyName == nameof(MainViewModel.SelectedElementNode))
+            if (args.PropertyName == nameof(MainViewModel.SelectedElementNode))
             {
                 NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.ElementType.Element 
                     ? Visibility.Visible 
                     : Visibility.Hidden;
             }
+        }
+
+        private void OnNewSessionClicked(object sender, RoutedEventArgs e)
+        {
+            MainViewModel = new MainViewModel{ApplicationName = "new.exe"};
+            DataContext = MainViewModel;
+
         }
     }
 }

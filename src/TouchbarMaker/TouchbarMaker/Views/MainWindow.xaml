@@ -16,7 +16,7 @@
         
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-                <Button Content="New"/>
+                <Button Content="New" Click="OnNewSessionClicked"/>
                 <Button Content="Load"/>
                 <TextBlock Text="{Binding ApplicationName}" />
             </StackPanel>
@@ -52,7 +52,10 @@
                     <Label>Element Information:</Label>
                     <Label Content="{Binding SelectedElementNode.Content.Id}" />
                     <Label Content="{Binding SelectedElementNode.Content.Name}" />
-                    <TextBox Text="{Binding SelectedElementNode.Content.KeyCode, Mode=TwoWay}"></TextBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Key</Label>
+                        <TextBox MinWidth="350" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.KeyCode, Mode=TwoWay}" />
+                    </StackPanel>
                     <Image x:Name="Image" Height="60" Width="60" Source="{Binding SelectedElementNode.Content.Icon}" />
                     <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}">Load Icon</Button>
                 </StackPanel>

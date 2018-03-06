@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -18,28 +17,28 @@ namespace TouchbarMaker.ViewModels
 
         public string ApplicationName { get; set; }
         public ObservableCollection<NodeViewModel> TreeElements { get; set; }
-        public NodeViewModel SelectedElementNode { get; set; }
+        private NodeViewModel _selectedElementNode;
+
+        public NodeViewModel SelectedElementNode
+        {
+            get => _selectedElementNode;
+            set
+            {
+                _selectedElementNode = value;
+                OnPropertyChanged();
+                AddContainerCommand.CanExecute(this);
+                AddElementCommand.CanExecute(this);
+                RemoveElementCommand.CanExecute(this);
+                AddElementIconCommand.CanExecute(this);
+            }
+        }
         public ICommand AddContainerCommand { get; set; }
         public ICommand AddElementCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
         public ICommand AddElementIconCommand { get; set; }
 
-        private TreeView _treeView;
-
-        public MainViewModel(TreeView treeView)
+        public MainViewModel()
         {
-            _treeView = treeView;
-            _treeView.SelectedItemChanged += (sender, args) =>
-            {
-                SelectedElementNode = _treeView.SelectedItem as NodeViewModel;
-                OnPropertyChanged(nameof(SelectedElementNode));
-
-                AddContainerCommand.CanExecute(sender);
-                AddElementCommand.CanExecute(sender);
-                RemoveElementCommand.CanExecute(sender);
-                AddElementIconCommand.CanExecute(sender);
-            };
-
             TreeElements = new ObservableCollection<NodeViewModel>
             {
                 new NodeViewModel
@@ -61,7 +60,7 @@ namespace TouchbarMaker.ViewModels
         {
             AddContainerCommand = new Commander(o =>
                 {
-                    var selected = _treeView.SelectedItem as NodeViewModel;
+                    var selected = SelectedElementNode;
                     var next = new NodeViewModel
                     {
                         Name = "New Container",
@@ -90,7 +89,7 @@ namespace TouchbarMaker.ViewModels
                 },
                 o =>
                 {
-                    if (!(_treeView.SelectedItem is NodeViewModel selected))
+                    if (!(SelectedElementNode is NodeViewModel selected))
                         return false;
 
                     return (selected.Type == NodeViewModel.ElementType.Root ||
@@ -99,7 +98,7 @@ namespace TouchbarMaker.ViewModels
 
             AddElementCommand = new Commander(o =>
             {
-                var selected = _treeView.SelectedItem as NodeViewModel;
+                var selected = SelectedElementNode;
 
                 var next = new NodeViewModel
                 {
@@ -124,16 +123,16 @@ namespace TouchbarMaker.ViewModels
                 }
             }, o =>
             {
-                return _treeView.SelectedItem is NodeViewModel selected;
+                return SelectedElementNode is NodeViewModel selected;
             });
 
             RemoveElementCommand = new Commander(o =>
             {
-                var selected = _treeView.SelectedItem as NodeViewModel;
+                var selected = SelectedElementNode;
                 selected.Parent.Elements.Remove(selected);
             }, o =>
             {
-                var selected = _treeView.SelectedItem as NodeViewModel;
+                var selected = SelectedElementNode;
                 return !(selected == null || selected.Type == NodeViewModel.ElementType.Root);
             });
 
@@ -157,13 +156,13 @@ namespace TouchbarMaker.ViewModels
                     }
                     else
                     {
-                        var selected = _treeView.SelectedItem as NodeViewModel;
+                        var selected = SelectedElementNode;
                         selected.Content.Icon = image;
                     }
                 }
             }, o =>
             {
-                var selected = _treeView.SelectedItem as NodeViewModel;
+                var selected = SelectedElementNode;
                 return selected != null && selected.Type != NodeViewModel.ElementType.Root;
             });
         }

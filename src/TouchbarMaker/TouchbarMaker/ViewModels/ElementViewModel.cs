@@ -50,6 +50,17 @@ namespace TouchbarMaker.ViewModels
 
         public string EncodedIcon => Bitmap?.ToEncodedIconFromBitmap();
 
+        private string _keyCode;
+        public string KeyCode
+        {
+            get => _keyCode;
+            set
+            {
+                _keyCode = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ElementViewModel(string id = null)
         {
             Id = id ?? Guid.NewGuid().ToString();

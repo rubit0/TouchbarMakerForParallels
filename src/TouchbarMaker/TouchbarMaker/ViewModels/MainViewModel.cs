@@ -37,13 +37,15 @@ namespace TouchbarMaker.ViewModels
         public ICommand RemoveElementCommand { get; set; }
         public ICommand AddElementIconCommand { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(string appName)
         {
+            ApplicationName = appName;
+
             TreeElements = new ObservableCollection<NodeViewModel>
             {
                 new NodeViewModel
                 {
-                    Name = "Root",
+                    Name = ApplicationName,
                     Type = NodeViewModel.ElementType.Root
                 }
             };

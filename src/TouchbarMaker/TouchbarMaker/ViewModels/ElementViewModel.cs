@@ -13,13 +13,13 @@ namespace TouchbarMaker.ViewModels
 
         public string Id { get; }
 
-        private string _name;
-        public string Name
+        private string _title;
+        public string Title
         {
-            get => _name;
+            get => _title;
             set
             {
-                _name = value;
+                _title = value;
                 OnPropertyChanged();
             }
         }
@@ -61,9 +61,53 @@ namespace TouchbarMaker.ViewModels
             }
         }
 
+        private bool _scaleImage2X;
+        public bool ScaleImage2X
+        {
+            get => _scaleImage2X;
+            set
+            {
+                _scaleImage2X = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _width;
+        public int Width
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Color? _textColor;
+        public Color? TextColor
+        {
+            get => _textColor;
+            set
+            {
+                _textColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Color _backgroundColor;
+        public Color BackgroundColor
+        {
+            get => _backgroundColor;
+            set
+            {
+                _backgroundColor = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ElementViewModel(string id = null)
         {
-            Id = id ?? Guid.NewGuid().ToString();
+            Id = id ?? Guid.NewGuid().ToString().Substring(0, 8);
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -31,7 +31,13 @@ namespace TouchbarMaker.ViewModels
 
         public NodeViewModel()
         {
-            Content = new ElementViewModel {Name = "ABC"};
+            Content = new ElementViewModel();
+
+            Content.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(ElementViewModel.Title))
+                    Name = Content.Title;
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

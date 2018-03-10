@@ -13,7 +13,7 @@ namespace TouchbarMaker.Views
             ElementName = name;
             DataContext = this;
             NameInput.Focus();
-            NameInput.Loaded += (sender, args) => NameInput.CaretIndex = NameInput.Text.Length;
+            NameInput.Loaded += (sender, args) => NameInput.SelectAll();
         }
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)

@@ -14,7 +14,7 @@ namespace TouchbarMaker.Views
         public MainWindow()
         {
             InitializeComponent();
-            MainViewModel = new MainViewModel {ApplicationName = "devenv.exe"};
+            MainViewModel = new MainViewModel("devenv.exe");
             DataContext = MainViewModel;
             MainViewModel.PropertyChanged += MainViewModelOnPropertyChanged;
 
@@ -26,8 +26,22 @@ namespace TouchbarMaker.Views
             TreeView.MouseDoubleClick += (sender, args) =>
             {
                 var dialog = new ChangeNameDialog(MainViewModel.SelectedElementNode.Name);
-                if (dialog.ShowDialog().GetValueOrDefault())
-                    MainViewModel.SelectedElementNode.Name = dialog.ElementName;
+
+                switch (MainViewModel.SelectedElementNode.Type)
+                {
+                    case NodeViewModel.ElementType.Root:
+                        if (dialog.ShowDialog().GetValueOrDefault())
+                            MainViewModel.SelectedElementNode.Name = dialog.ElementName;
+                        break;
+                    case NodeViewModel.ElementType.Container:
+                        if (dialog.ShowDialog().GetValueOrDefault())
+                            MainViewModel.SelectedElementNode.Name = dialog.ElementName;
+                        break;
+                    case NodeViewModel.ElementType.Element:
+                        if (dialog.ShowDialog().GetValueOrDefault())
+                            MainViewModel.SelectedElementNode.Content.Title = dialog.ElementName;
+                        break;
+                }
 
                 dialog.Close();
             };
@@ -46,9 +60,8 @@ namespace TouchbarMaker.Views
 
         private void OnNewSessionClicked(object sender, RoutedEventArgs e)
         {
-            MainViewModel = new MainViewModel{ApplicationName = "new.exe"};
+            MainViewModel = new MainViewModel("new.exe");
             DataContext = MainViewModel;
-
         }
     }
 }

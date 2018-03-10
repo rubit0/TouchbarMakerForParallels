@@ -7,57 +7,92 @@
         xmlns:models="clr-namespace:TouchbarMaker.ViewModels"
         mc:Ignorable="d"
         Title="Touchbar Maker for Parallels" Height="600" Width="800" MinWidth="600">
-    <Grid Margin="10 0 10 10">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MinHeight="20" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="24" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="0">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="New" Click="OnNewSessionClicked"/>
-                <Button Content="Load"/>
-                <TextBlock Text="{Binding ApplicationName}" />
-            </StackPanel>
-        </Grid>
 
-        <Separator Grid.Row="1" />
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" Click="OnNewSessionClicked" />
+                    <MenuItem Header="_Load" />
+                    <MenuItem Header="_Save" />
+                    <MenuItem Header="_Export" />
+                    <Separator />
+                    <MenuItem Header="_Close" />
+                </MenuItem>
+            </Menu>
+        </DockPanel>
 
-        <Grid Grid.Row="2" Margin="0 5 0 0">
+        <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Column="0">
-                <ToolBarTray DockPanel.Dock="Top" AllowDrop="False" IsLocked="True">
+            <DockPanel Grid.Column="0" >
+                <ToolBarTray Orientation="Vertical" DockPanel.Dock="Left" AllowDrop="False" IsLocked="True">
                     <ToolBar>
-                        <Button Command="{Binding AddContainerCommand}" >AddContainer</Button>
-                        <Button Command="{Binding AddElementCommand}" >Add Element</Button>
+                        <Button Command="{Binding AddContainerCommand}" >Container</Button>
+                        <Separator />
+                        <Button Command="{Binding AddElementCommand}" >Element</Button>
+                        <Separator />
                         <Button Command="{Binding RemoveElementCommand}" >Remove</Button>
                     </ToolBar>
                 </ToolBarTray>
                 <TreeView x:Name="TreeView" ItemsSource="{Binding TreeElements}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Elements}" DataType="{x:Type models:NodeViewModel}" >
-                            <Label Content="{Binding Name}"/>
+                            <Label Content="{Binding Name, Mode=TwoWay}"/>
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
             </DockPanel>
 
-            <Grid x:Name="NodeContentDisplay" Grid.Column="1">
+            <Grid x:Name="NodeContentDisplay" Grid.Column="1" >
                 <StackPanel IsEnabled="{Binding SelectedElementNode.IsElement}">
-                    <Label>Element Information:</Label>
-                    <Label Content="{Binding SelectedElementNode.Content.Id}" />
-                    <Label Content="{Binding SelectedElementNode.Content.Name}" />
-                    <StackPanel Orientation="Horizontal">
-                        <Label>Key</Label>
-                        <TextBox MinWidth="350" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.KeyCode, Mode=TwoWay}" />
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="100">Id:</Label>
+                        <Label Foreground="DarkGray" Content="{Binding SelectedElementNode.Content.Id}" />
                     </StackPanel>
-                    <Image x:Name="Image" Height="60" Width="60" Source="{Binding SelectedElementNode.Content.Icon}" />
-                    <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}">Load Icon</Button>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Image MinWidth="60" MinHeight="60" x:Name="Image" MaxHeight="60" MaxWidth="60" Source="{Binding SelectedElementNode.Content.Icon}" />
+                        <Button Margin="60 0 0 0" Command="{Binding AddElementIconCommand, Mode=TwoWay}">Load Icon</Button>
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Title</Label>
+                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.Title, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Key Action</Label>
+                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.KeyCode, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Width (0 = Default)</Label>
+                        <TextBox MinWidth="50" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.Width, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Scale Icon 2x</Label>
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding SelectedElementNode.Content.ScaleImage2X, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Title Color</Label>
+                        <Button>Color Picker...</Button>
+                    </StackPanel>
+
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label MinWidth="120">Background Color</Label>
+                        <Button>Color Picker...</Button>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>

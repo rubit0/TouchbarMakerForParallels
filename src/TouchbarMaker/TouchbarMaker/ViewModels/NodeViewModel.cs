@@ -6,7 +6,7 @@ namespace TouchbarMaker.ViewModels
 {
     public class NodeViewModel : INotifyPropertyChanged
     {
-        public enum ElementType
+        public enum NodeType
         {
             Root,
             Container,
@@ -24,19 +24,33 @@ namespace TouchbarMaker.ViewModels
             }
         }
 
-        public ElementType Type { get; set; }
+        public NodeType Type { get; set; }
+
         public NodeViewModel Parent { get; set; }
         public ObservableCollection<NodeViewModel> Elements { get; set; } = new ObservableCollection<NodeViewModel>();
-        public ElementViewModel Content { get; set; }
+        public ContainerViewModel ContainerContent { get; set; }
+        public ElementViewModel ElementContent { get; set; }
 
-        public NodeViewModel()
+        public NodeViewModel(bool isRoot = true)
         {
-            Content = new ElementViewModel();
+            if(isRoot)
+                Type = NodeType.Root;
+        }
 
-            Content.PropertyChanged += (sender, args) =>
+        public NodeViewModel(ContainerViewModel.ContainerType containerType)
+        {
+            Type = NodeType.Container;
+            ContainerContent = new ContainerViewModel(containerType, Elements);
+        }
+
+        public NodeViewModel(ElementViewModel.ElementType elementType)
+        {
+            Type = NodeType.Element;
+            ElementContent = new ElementViewModel(elementType);
+            ElementContent.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(ElementViewModel.Title))
-                    Name = Content.Title;
+                    Name = ElementContent.Title;
             };
         }
 

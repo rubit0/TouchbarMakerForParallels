@@ -19,7 +19,7 @@
                     <MenuItem Header="_New" Click="OnNewSessionClicked" />
                     <MenuItem Header="_Load" />
                     <MenuItem Header="_Save" />
-                    <MenuItem Header="_Export" />
+                    <MenuItem Header="_Export" Click="OnExportClicked" />
                     <Separator />
                     <MenuItem Header="_Close" />
                 </MenuItem>
@@ -35,9 +35,9 @@
             <DockPanel Grid.Column="0" >
                 <ToolBarTray Orientation="Vertical" DockPanel.Dock="Left" AllowDrop="False" IsLocked="True">
                     <ToolBar>
-                        <Button Command="{Binding AddContainerCommand}" >Container</Button>
+                        <Button Command="{Binding AddScrollViewCommand}" >Scroll View</Button>
                         <Separator />
-                        <Button Command="{Binding AddElementCommand}" >Element</Button>
+                        <Button Command="{Binding AddButtonCommand}" >Button</Button>
                         <Separator />
                         <Button Command="{Binding RemoveElementCommand}" >Remove</Button>
                     </ToolBar>
@@ -52,36 +52,36 @@
             </DockPanel>
 
             <Grid x:Name="NodeContentDisplay" Grid.Column="1" >
-                <StackPanel IsEnabled="{Binding SelectedElementNode.IsElement}">
+                <StackPanel >
 
                     <StackPanel Margin="10" Orientation="Horizontal">
                         <Label MinWidth="100">Id:</Label>
-                        <Label Foreground="DarkGray" Content="{Binding SelectedElementNode.Content.Id}" />
+                        <Label Foreground="DarkGray" Content="{Binding SelectedElementNode.ElementContent.Id}" />
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
-                        <Image MinWidth="60" MinHeight="60" x:Name="Image" MaxHeight="60" MaxWidth="60" Source="{Binding SelectedElementNode.Content.Icon}" />
+                        <Image MinWidth="60" MinHeight="60" x:Name="Image" MaxHeight="60" MaxWidth="60" Source="{Binding SelectedElementNode.ElementContent.Icon}" />
                         <Button Margin="60 0 0 0" Command="{Binding AddElementIconCommand, Mode=TwoWay}">Load Icon</Button>
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
                         <Label MinWidth="120">Title</Label>
-                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.Title, Mode=TwoWay}" />
+                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.ElementContent.Title, Mode=TwoWay}" />
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
                         <Label MinWidth="120">Key Action</Label>
-                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.KeyCode, Mode=TwoWay}" />
+                        <TextBox MinWidth="250" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.ElementContent.KeyCode, Mode=TwoWay}" />
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
                         <Label MinWidth="120">Width (0 = Default)</Label>
-                        <TextBox MinWidth="50" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.Content.Width, Mode=TwoWay}" />
+                        <TextBox MinWidth="50" HorizontalAlignment="Stretch" Text="{Binding SelectedElementNode.ElementContent.Width, Mode=TwoWay}" />
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">
                         <Label MinWidth="120">Scale Icon 2x</Label>
-                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding SelectedElementNode.Content.ScaleImage2X, Mode=TwoWay}" />
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding SelectedElementNode.ElementContent.ScaleImage2X, Mode=TwoWay}" />
                     </StackPanel>
 
                     <StackPanel Margin="10" Orientation="Horizontal">

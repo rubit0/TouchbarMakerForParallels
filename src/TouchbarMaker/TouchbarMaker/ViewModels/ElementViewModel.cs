@@ -4,12 +4,18 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using TouchbarMaker.Core;
+using TouchbarMaker.Tools;
 
 namespace TouchbarMaker.ViewModels
 {
     public class ElementViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public enum ElementType
+        {
+            Button
+        }
 
         public string Id { get; }
 
@@ -32,7 +38,7 @@ namespace TouchbarMaker.ViewModels
             {
                 _icon = value;
                 OnPropertyChanged();
-                Bitmap = Tools.Converter.ConvertBitmapImage(_icon);
+                Bitmap = Converter.ConvertBitmapImage(_icon);
             }
         }
 
@@ -94,8 +100,8 @@ namespace TouchbarMaker.ViewModels
             }
         }
 
-        private Color _backgroundColor;
-        public Color BackgroundColor
+        private Color? _backgroundColor;
+        public Color? BackgroundColor
         {
             get => _backgroundColor;
             set
@@ -105,8 +111,11 @@ namespace TouchbarMaker.ViewModels
             }
         }
 
-        public ElementViewModel(string id = null)
+        public ElementType Type { get; }
+
+        public ElementViewModel(ElementType type, string id = null)
         {
+            Type = type;
             Id = id ?? Guid.NewGuid().ToString().Substring(0, 8);
         }
 

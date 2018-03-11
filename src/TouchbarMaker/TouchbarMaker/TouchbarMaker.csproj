@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Tools\Converter.cs" />
     <Compile Include="ViewModels\Commander.cs" />
+    <Compile Include="ViewModels\ContainerViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NodeViewModel.cs" />

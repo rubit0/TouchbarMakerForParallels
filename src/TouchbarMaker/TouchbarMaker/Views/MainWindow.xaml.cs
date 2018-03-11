@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
+using TouchbarMaker.Tools;
 using TouchbarMaker.ViewModels;
 
 namespace TouchbarMaker.Views
@@ -14,7 +16,27 @@ namespace TouchbarMaker.Views
         public MainWindow()
         {
             InitializeComponent();
-            MainViewModel = new MainViewModel("devenv.exe");
+            CreateNewSession();
+        }
+
+        private void MainViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(MainViewModel.SelectedElementNode))
+            {
+                NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.NodeType.Element 
+                    ? Visibility.Visible 
+                    : Visibility.Hidden;
+            }
+        }
+
+        private void OnNewSessionClicked(object sender, RoutedEventArgs e)
+        {
+            CreateNewSession();
+        }
+
+        private void CreateNewSession(string appName = "app.exe")
+        {
+            MainViewModel = new MainViewModel(appName);
             DataContext = MainViewModel;
             MainViewModel.PropertyChanged += MainViewModelOnPropertyChanged;
 
@@ -29,17 +51,13 @@ namespace TouchbarMaker.Views
 
                 switch (MainViewModel.SelectedElementNode.Type)
                 {
-                    case NodeViewModel.ElementType.Root:
+                    case NodeViewModel.NodeType.Container:
                         if (dialog.ShowDialog().GetValueOrDefault())
                             MainViewModel.SelectedElementNode.Name = dialog.ElementName;
                         break;
-                    case NodeViewModel.ElementType.Container:
+                    case NodeViewModel.NodeType.Element:
                         if (dialog.ShowDialog().GetValueOrDefault())
-                            MainViewModel.SelectedElementNode.Name = dialog.ElementName;
-                        break;
-                    case NodeViewModel.ElementType.Element:
-                        if (dialog.ShowDialog().GetValueOrDefault())
-                            MainViewModel.SelectedElementNode.Content.Title = dialog.ElementName;
+                            MainViewModel.SelectedElementNode.ElementContent.Title = dialog.ElementName;
                         break;
                 }
 
@@ -48,20 +66,9 @@ namespace TouchbarMaker.Views
             NodeContentDisplay.Visibility = Visibility.Hidden;
         }
 
-        private void MainViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void OnExportClicked(object sender, RoutedEventArgs e)
         {
-            if (args.PropertyName == nameof(MainViewModel.SelectedElementNode))
-            {
-                NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.ElementType.Element 
-                    ? Visibility.Visible 
-                    : Visibility.Hidden;
-            }
-        }
-
-        private void OnNewSessionClicked(object sender, RoutedEventArgs e)
-        {
-            MainViewModel = new MainViewModel("new.exe");
-            DataContext = MainViewModel;
+            var toucharDefinition = MainViewModel.TreeElements.ToList().ConvertFromNodes();
         }
     }
 }

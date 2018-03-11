@@ -26,14 +26,14 @@ namespace TouchbarMaker.ViewModels
             {
                 _selectedElementNode = value;
                 OnPropertyChanged();
-                AddContainerCommand.CanExecute(this);
-                AddElementCommand.CanExecute(this);
+                AddScrollViewCommand.CanExecute(this);
+                AddButtonCommand.CanExecute(this);
                 RemoveElementCommand.CanExecute(this);
                 AddElementIconCommand.CanExecute(this);
             }
         }
-        public ICommand AddContainerCommand { get; set; }
-        public ICommand AddElementCommand { get; set; }
+        public ICommand AddScrollViewCommand { get; set; }
+        public ICommand AddButtonCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
         public ICommand AddElementIconCommand { get; set; }
 
@@ -46,7 +46,7 @@ namespace TouchbarMaker.ViewModels
                 new NodeViewModel
                 {
                     Name = ApplicationName,
-                    Type = NodeViewModel.ElementType.Root
+                    Type = NodeViewModel.NodeType.Root
                 }
             };
 
@@ -60,32 +60,34 @@ namespace TouchbarMaker.ViewModels
 
         private void BuildCommands()
         {
-            AddContainerCommand = new Commander(o =>
+            AddScrollViewCommand = new Commander(o =>
                 {
                     var selected = SelectedElementNode;
                     var next = new NodeViewModel
                     {
-                        Name = "New Container",
-                        Type = NodeViewModel.ElementType.Container
+                        Name = "New Scroll View",
+                        Type = NodeViewModel.NodeType.Container
                     };
+                    next.ContainerContent =
+                        new ContainerViewModel(ContainerViewModel.ContainerType.ScrollView, next.Elements);
 
                     switch (selected?.Type)
                     {
-                        case NodeViewModel.ElementType.Root:
+                        case NodeViewModel.NodeType.Root:
                             next.Parent = selected;
                             next.Parent.Elements.Add(next);
                             break;
-                        case NodeViewModel.ElementType.Container:
+                        case NodeViewModel.NodeType.Container:
                             next.Parent = selected;
                             next.Parent.Elements.Add(next);
                             break;
-                        case NodeViewModel.ElementType.Element:
+                        case NodeViewModel.NodeType.Element:
                             next.Parent = selected.Parent;
                             next.Parent.Elements.Add(next);
                             break;
                         case null:
                             next.Parent = TreeElements.FirstOrDefault();
-                            next.Parent.Elements.Add(next);
+                            next.Parent?.Elements.Add(next);
                             break;
                     }
                 },
@@ -94,31 +96,31 @@ namespace TouchbarMaker.ViewModels
                     if (!(SelectedElementNode is NodeViewModel selected))
                         return false;
 
-                    return (selected.Type == NodeViewModel.ElementType.Root ||
-                            selected.Type == NodeViewModel.ElementType.Container);
+                    return selected.Type == NodeViewModel.NodeType.Root;
                 });
 
-            AddElementCommand = new Commander(o =>
+            AddButtonCommand = new Commander(o =>
             {
                 var selected = SelectedElementNode;
 
                 var next = new NodeViewModel
                 {
-                    Name = "New Element",
-                    Type = NodeViewModel.ElementType.Element
+                    Name = "New Button",
+                    Type = NodeViewModel.NodeType.Element,
+                    ElementContent = new ElementViewModel(ElementViewModel.ElementType.Button)
                 };
 
                 switch (selected.Type)
                 {
-                    case NodeViewModel.ElementType.Root:
+                    case NodeViewModel.NodeType.Root:
                         next.Parent = selected;
                         next.Parent.Elements.Add(next);
                         break;
-                    case NodeViewModel.ElementType.Container:
+                    case NodeViewModel.NodeType.Container:
                         next.Parent = selected;
                         next.Parent.Elements.Add(next);
                         break;
-                    case NodeViewModel.ElementType.Element:
+                    case NodeViewModel.NodeType.Element:
                         next.Parent = selected.Parent;
                         next.Parent.Elements.Add(next);
                         break;
@@ -135,7 +137,7 @@ namespace TouchbarMaker.ViewModels
             }, o =>
             {
                 var selected = SelectedElementNode;
-                return !(selected == null || selected.Type == NodeViewModel.ElementType.Root);
+                return selected != null && selected.Type != NodeViewModel.NodeType.Root;
             });
 
             AddElementIconCommand = new Commander(o =>
@@ -159,13 +161,13 @@ namespace TouchbarMaker.ViewModels
                     else
                     {
                         var selected = SelectedElementNode;
-                        selected.Content.Icon = image;
+                        selected.ElementContent.Icon = image;
                     }
                 }
             }, o =>
             {
                 var selected = SelectedElementNode;
-                return selected != null && selected.Type != NodeViewModel.ElementType.Root;
+                return selected != null && selected.Type == NodeViewModel.NodeType.Element;
             });
         }
     }

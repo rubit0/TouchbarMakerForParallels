@@ -14,11 +14,20 @@ namespace TouchbarMaker.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public string ApplicationName { get; set; }
         public ObservableCollection<NodeViewModel> TreeElements { get; set; }
-        private NodeViewModel _selectedElementNode;
 
+        private string _applicationName;
+        public string ApplicationName
+        {
+            get => _applicationName;
+            set
+            {
+                _applicationName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private NodeViewModel _selectedElementNode;
         public NodeViewModel SelectedElementNode
         {
             get => _selectedElementNode;
@@ -32,6 +41,7 @@ namespace TouchbarMaker.ViewModels
                 AddElementIconCommand.CanExecute(this);
             }
         }
+
         public ICommand AddScrollViewCommand { get; set; }
         public ICommand AddButtonCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
@@ -108,6 +118,9 @@ namespace TouchbarMaker.ViewModels
                     Name = "New Button",
                     Type = NodeViewModel.NodeType.Element,
                     ElementContent = new ElementViewModel(ElementViewModel.ElementType.Button)
+                    {
+                        Title = "New Action"
+                    }
                 };
 
                 switch (selected.Type)

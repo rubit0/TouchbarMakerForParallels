@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows.Media;
 
 namespace TouchbarMaker.Core
@@ -65,6 +68,18 @@ namespace TouchbarMaker.Core
             }
 
             throw new InvalidOperationException($"The provided color string [{color}] is not in a correct hex-color format.");
+        }
+
+        /// <summary>
+        /// Get the appropiate path for Parallels v13 by the provided exe name
+        /// </summary>
+        /// <param name="exeName">Name of the apps executable without file extension</param>
+        /// <returns>Complete path including file extension</returns>
+        public static string GetPathToStore(string exeName)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var directory = Directory.CreateDirectory(path + "\\Parallels\\CustomTouchBars");
+            return $"{directory.FullName}\\{exeName}.exe.xml";
         }
     }
 }

@@ -17,11 +17,10 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" Click="OnNewSessionClicked" />
-                    <MenuItem Header="_Load" />
-                    <MenuItem Header="_Save" />
+                    <MenuItem Header="_Load" Click="OnLoadClicked" />
                     <MenuItem Header="_Export" Click="OnExportClicked" />
                     <Separator />
-                    <MenuItem Header="_Close" />
+                    <MenuItem Header="_Close" Click="OnExitClicked" />
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -42,7 +41,7 @@
                         <Button Command="{Binding RemoveElementCommand}" >Remove</Button>
                     </ToolBar>
                 </ToolBarTray>
-                <TreeView x:Name="TreeView" ItemsSource="{Binding TreeElements}">
+                <TreeView x:Name="TreeView" ItemsSource="{Binding TreeElements}" KeyDown="OnKeyPressedInTree">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Elements}" DataType="{x:Type models:NodeViewModel}" >
                             <Label Content="{Binding Name, Mode=TwoWay}"/>

@@ -25,7 +25,6 @@ namespace TouchbarMaker.ViewModels
         }
 
         public NodeType Type { get; set; }
-
         public NodeViewModel Parent { get; set; }
         public ObservableCollection<NodeViewModel> Elements { get; set; } = new ObservableCollection<NodeViewModel>();
         public ContainerViewModel ContainerContent { get; set; }

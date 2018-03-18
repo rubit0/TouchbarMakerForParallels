@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using ColorPickerWPF.Code;
 using Microsoft.Win32;
 using TouchbarMaker.Core;
 
@@ -46,6 +47,7 @@ namespace TouchbarMaker.ViewModels
         public ICommand AddButtonCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
         public ICommand AddElementIconCommand { get; set; }
+
 
         public MainViewModel(string appName)
         {

@@ -12,9 +12,9 @@ namespace TouchbarMaker.Tools
 {
     public static class Converter
     {
-        public static RootTouchbar ConvertFromNodes(this List<NodeViewModel> graph)
+        public static RootTouchbar ConvertFromNodes(this List<NodeViewModel> graph, string appName)
         {
-            var root = new RootTouchbar(Guid.NewGuid().ToString().Substring(0, 8));
+            var root = new RootTouchbar(appName + "_" + Guid.NewGuid().ToString().Substring(0, 8));
 
             foreach (var element in graph[0].Elements)
             {
@@ -44,9 +44,9 @@ namespace TouchbarMaker.Tools
             if (node.Bitmap != null)
                 button.Image = node.EncodedIcon;
             if (node.TextColor.HasValue)
-                button.TextColor = node.TextColor.Value.ToString();
+                button.TextColor = node.TextColor.Value.ConvertColorToHex();
             if (node.BackgroundColor.HasValue)
-                button.BackgroundColor = node.BackgroundColor.Value.ToString();
+                button.BackgroundColor = node.BackgroundColor.Value.ConvertColorToHex();
 
             return button;
         }
@@ -102,5 +102,11 @@ namespace TouchbarMaker.Tools
                     return new BmpBitmapEncoder();
             }
         }
+
+        private static string ConvertColorToHex(this Color color)
+        {
+            return color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
+        }
+
     }
 }

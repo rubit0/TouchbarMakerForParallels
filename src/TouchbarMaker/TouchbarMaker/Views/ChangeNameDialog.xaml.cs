@@ -1,9 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using MahApps.Metro.Controls;
 
 namespace TouchbarMaker.Views
 {
-    public partial class ChangeNameDialog : Window
+    public partial class ChangeNameDialog : MetroWindow
     {
         public string ElementName { get; set; }
 

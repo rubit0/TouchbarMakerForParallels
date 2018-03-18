@@ -37,6 +37,9 @@ namespace TouchbarMaker.Views
         {
             var settings = new MetroDialogSettings {DefaultText = MainViewModel.SelectedElementNode?.Name ?? "myApp" };
             var result = await this.ShowInputAsync("Create new Project", "App executable name\n'make sure to mach the *.exe name'", settings);
+            if(string.IsNullOrWhiteSpace(result))
+                return;
+
             TreeView.MouseDoubleClick -= OnTreeViewDoubleClick;
             MainViewModel.PropertyChanged -= MainViewModelOnPropertyChanged;
             CreateNewSession(result);

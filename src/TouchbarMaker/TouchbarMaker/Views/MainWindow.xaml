@@ -11,9 +11,24 @@
         Title="Touchbar Maker for Parallels" Height="600" Width="800" MinWidth="600" ResizeMode="CanResizeWithGrip">
     <controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
-            <Button Content="New" Click="OnNewSessionClicked" />
-            <Button Content="Load" Click="OnLoadClicked" />
-            <Button Content="Export" Click="OnExportClicked" />
+            <Button Click="OnNewSessionClicked" HorizontalAlignment="Center" >
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Creation" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    <Label Foreground="WhiteSmoke">New</Label>
+                </StackPanel>
+            </Button>
+            <Button Click="OnLoadClicked" HorizontalAlignment="Center" >
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="FolderOpen" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    <Label Foreground="WhiteSmoke">Load</Label>
+                </StackPanel>
+            </Button>
+            <Button Click="OnExportClicked" HorizontalAlignment="Center" >
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ContentSave" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    <Label Foreground="WhiteSmoke">Save</Label>
+                </StackPanel>
+            </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <Grid>

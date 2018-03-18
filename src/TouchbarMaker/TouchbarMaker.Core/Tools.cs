@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace TouchbarMaker.Core
 {
@@ -37,9 +38,9 @@ namespace TouchbarMaker.Core
         /// </summary>
         /// <param name="image">Target image</param>
         /// <returns>Is accapted size?</returns>
-        public static bool IsAcceptedIconSize(this ImageSource image)
+        public static bool IsAcceptedIconSize(this BitmapImage image)
         {
-            return IsAcceptedIconSize((int)image.Height, (int)image.Width);
+            return IsAcceptedIconSize(image.PixelHeight, image.PixelWidth);
         }
 
         /// <summary>

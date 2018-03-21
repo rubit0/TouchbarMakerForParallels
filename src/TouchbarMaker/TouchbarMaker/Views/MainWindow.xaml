@@ -42,24 +42,33 @@
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Column="0" >
-                <ToolBarTray Orientation="Vertical" DockPanel.Dock="Left" AllowDrop="False" IsLocked="True">
-                    <ToolBar>
-                        <Button Command="{Binding AddScrollViewCommand}" >Scroll View</Button>
-                        <Separator />
-                        <Button Command="{Binding AddButtonCommand}" >Button</Button>
-                        <Separator />
-                        <Button Command="{Binding RemoveElementCommand}" >Remove</Button>
-                    </ToolBar>
-                </ToolBarTray>
-                <TreeView x:Name="TreeView" ItemsSource="{Binding TreeElements}" KeyDown="OnKeyPressedInTree">
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Background="#444444">
+                    <Button Background="Transparent" Margin="0 5" Command="{Binding AddButtonCommand}" ToolTip="Add button element" >
+                        <iconPacks:Modern Kind="InterfaceButton" Height="32" Width="32" />
+                    </Button>
+                    <Separator/>
+                    <Button Background="Transparent" Margin="0 5" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Command="{Binding AddScrollViewCommand}" ToolTip="Add Scroll View container" >
+                        <!--Scroll-->
+                        <iconPacks:Modern Kind="List" Height="20" Width="20" />
+                    </Button>
+                    <Separator/>
+                    <Button Background="Transparent" Margin="0 5" Command="{Binding RemoveElementCommand}" >
+                        <iconPacks:PackIconMaterial Kind="Delete" Height="20" Width="20" />
+                    </Button>
+                </StackPanel>
+                <TreeView Grid.Column="1" x:Name="TreeView" ItemsSource="{Binding TreeElements}" KeyDown="OnKeyPressedInTree">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Elements}" DataType="{x:Type models:NodeViewModel}" >
                             <Label Content="{Binding Name, Mode=TwoWay}"/>
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </DockPanel>
+            </Grid>
 
             <Grid x:Name="NodeContentDisplay" Grid.Column="1" >
                 <StackPanel >

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,7 @@ namespace TouchbarMaker.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<NodeViewModel> TreeElements { get; set; }
+        public ObservableCollection<NodeViewModel> TreeElements { get; set; } = new ObservableCollection<NodeViewModel>();
 
         private string _applicationName;
         public string ApplicationName
@@ -43,16 +44,6 @@ namespace TouchbarMaker.ViewModels
         public MainViewModel(string appName)
         {
             ApplicationName = appName;
-
-            TreeElements = new ObservableCollection<NodeViewModel>
-            {
-                new NodeViewModel
-                {
-                    Name = ApplicationName,
-                    Type = NodeViewModel.NodeType.Root
-                }
-            };
-
             BuildCommands();
         }
 
@@ -65,86 +56,79 @@ namespace TouchbarMaker.ViewModels
         {
             AddScrollViewCommand = new Commander(o =>
                 {
-                    var selected = SelectedElementNode;
-                    var next = new NodeViewModel
+                    var node = new NodeViewModel(ContainerViewModel.ContainerType.ScrollView)
                     {
                         Name = "New Scroll View",
-                        Type = NodeViewModel.NodeType.Container
+                        ContainerContent = new ContainerViewModel(ContainerViewModel.ContainerType.ScrollView)
                     };
-                    next.ContainerContent =
-                        new ContainerViewModel(ContainerViewModel.ContainerType.ScrollView, next.Elements);
-
-                    switch (selected?.Type)
-                    {
-                        case NodeViewModel.NodeType.Root:
-                            next.Parent = selected;
-                            next.Parent.Elements.Add(next);
-                            break;
-                        case NodeViewModel.NodeType.Container:
-                            next.Parent = selected;
-                            next.Parent.Elements.Add(next);
-                            break;
-                        case NodeViewModel.NodeType.Element:
-                            next.Parent = selected.Parent;
-                            next.Parent.Elements.Add(next);
-                            break;
-                        case null:
-                            next.Parent = TreeElements.FirstOrDefault();
-                            next.Parent?.Elements.Add(next);
-                            break;
-                    }
+                    TreeElements.Add(node);
                 },
                 o =>
                 {
-                    if (!(SelectedElementNode is NodeViewModel selected))
-                        return false;
+                    if (SelectedElementNode == null)
+                        return true;
 
-                    return selected.Type == NodeViewModel.NodeType.Root;
+                    if (SelectedElementNode != null && SelectedElementNode.Type == NodeViewModel.NodeType.Element)
+                        return true;
+
+                    return false;
                 });
 
             AddButtonCommand = new Commander(o =>
             {
                 var selected = SelectedElementNode;
 
-                var next = new NodeViewModel
+                var node = new NodeViewModel(ElementViewModel.ElementType.Button)
                 {
                     Name = "New Button",
-                    Type = NodeViewModel.NodeType.Element,
                     ElementContent = new ElementViewModel(ElementViewModel.ElementType.Button)
                     {
                         Title = "New Action"
                     }
                 };
 
-                switch (selected.Type)
+                if (selected == null)
                 {
-                    case NodeViewModel.NodeType.Root:
-                        next.Parent = selected;
-                        next.Parent.Elements.Add(next);
-                        break;
-                    case NodeViewModel.NodeType.Container:
-                        next.Parent = selected;
-                        next.Parent.Elements.Add(next);
-                        break;
-                    case NodeViewModel.NodeType.Element:
-                        next.Parent = selected.Parent;
-                        next.Parent.Elements.Add(next);
-                        break;
+                    TreeElements.Add(node);
                 }
-            }, o =>
-            {
-                return SelectedElementNode is NodeViewModel selected;
-            });
+                else
+                {
+                    switch (selected.Type)
+                    {
+                        case NodeViewModel.NodeType.Container:
+                            node.Parent = selected;
+                            node.Parent.Elements.Add(node);
+                            break;
+                        case NodeViewModel.NodeType.Element:
+                            if (selected.Parent == null)
+                            {
+                                TreeElements.Add(node);
+                            }
+                            else if (selected.Parent.Type == NodeViewModel.NodeType.Container)
+                            {
+                                node.Parent = selected.Parent;
+                                node.Parent.Elements.Add(node);
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("The selected item seems to be neested by-one too deep, this is invalid!");
+                            }
+                            break;
+                    }
+                }
+            }, o => true);
 
             RemoveElementCommand = new Commander(o =>
             {
-                var selected = SelectedElementNode;
-                selected.Parent.Elements.Remove(selected);
-            }, o =>
-            {
-                var selected = SelectedElementNode;
-                return selected != null && selected.Type != NodeViewModel.NodeType.Root;
-            });
+                if (SelectedElementNode.Parent == null)
+                {
+                    TreeElements.Remove(SelectedElementNode);
+                }
+                else
+                {
+                    SelectedElementNode.Parent.Elements.Remove(SelectedElementNode);
+                }
+            }, o => SelectedElementNode != null);
         }
     }
 }

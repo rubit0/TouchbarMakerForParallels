@@ -8,7 +8,6 @@ namespace TouchbarMaker.ViewModels
     {
         public enum NodeType
         {
-            Root,
             Container,
             Element
         }
@@ -29,12 +28,6 @@ namespace TouchbarMaker.ViewModels
         public ObservableCollection<NodeViewModel> Elements { get; set; } = new ObservableCollection<NodeViewModel>();
         public ContainerViewModel ContainerContent { get; set; }
         public ElementViewModel ElementContent { get; set; }
-
-        public NodeViewModel(bool isRoot = true)
-        {
-            if(isRoot)
-                Type = NodeType.Root;
-        }
 
         public NodeViewModel(ContainerViewModel.ContainerType containerType)
         {

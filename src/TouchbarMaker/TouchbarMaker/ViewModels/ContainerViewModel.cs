@@ -20,11 +20,10 @@ namespace TouchbarMaker.ViewModels
         public ContainerType Type { get; set; }
         public ObservableCollection<NodeViewModel> Elements { get; set; }
 
-
-        public ContainerViewModel(ContainerType type, ObservableCollection<NodeViewModel> elements, string id = null)
+        public ContainerViewModel(ContainerType type, ObservableCollection<NodeViewModel> elements = null, string id = null)
         {
             Type = type;
-            Elements = elements;
+            Elements = elements ?? new ObservableCollection<NodeViewModel>();
             Id = id ?? Guid.NewGuid().ToString().Substring(0, 8);
         }
 

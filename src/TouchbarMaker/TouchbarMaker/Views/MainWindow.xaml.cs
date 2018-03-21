@@ -27,27 +27,35 @@ namespace TouchbarMaker.Views
         {
             if (args.PropertyName == nameof(MainViewModel.SelectedElementNode))
             {
-                NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.NodeType.Element 
-                    ? Visibility.Visible 
-                    : Visibility.Hidden;
+                if (MainViewModel.SelectedElementNode == null)
+                {
+                    NodeContentDisplay.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.NodeType.Element
+                        ? Visibility.Visible
+                        : Visibility.Hidden;
+                }
             }
         }
 
         private async void OnNewSessionClicked(object sender, RoutedEventArgs e)
         {
-            var settings = new MetroDialogSettings {DefaultText = MainViewModel.SelectedElementNode?.Name ?? "myApp" };
-            var result = await this.ShowInputAsync("Create new Project", "App executable name\n'make sure to mach the *.exe name'", settings);
+            var settings = new MetroDialogSettings { DefaultText = "myApp.exe" };
+            var result = await this.ShowInputAsync("Create new Project", "Type in the applications executable name\ne.g. for Paint = 'paint.exe'", settings);
             if(string.IsNullOrWhiteSpace(result))
                 return;
 
             TreeView.MouseDoubleClick -= OnTreeViewDoubleClick;
+            TreeView.MouseDown -= OnTreeViewOnMouseDown;
             MainViewModel.PropertyChanged -= MainViewModelOnPropertyChanged;
             CreateNewSession(result);
         }
 
         private void OnLoadClicked(object sender, RoutedEventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
 
         private async void OnExportClicked(object sender, RoutedEventArgs e)
@@ -91,24 +99,33 @@ namespace TouchbarMaker.Views
             };
 
             TreeView.MouseDoubleClick += OnTreeViewDoubleClick;
+            TreeView.MouseDown += OnTreeViewOnMouseDown;
 
             MainViewModel.SelectedElementNode = MainViewModel.TreeElements.FirstOrDefault();
             NodeContentDisplay.Visibility = Visibility.Hidden;
         }
 
+        private void OnTreeViewOnMouseDown(object o, MouseButtonEventArgs args)
+        {
+            if(TreeView.SelectedItem == null)
+                return;
+
+            var hit = VisualTreeHelper.HitTest(TreeView, args.GetPosition(TreeView));
+            if (!(hit.VisualHit is TextBlock))
+            {
+                TreeView.ClearSelection();
+                MainViewModel.SelectedElementNode = null;
+            }
+        }
+
         private async void OnTreeViewDoubleClick(object sender, MouseButtonEventArgs args)
         {
-            var hit = VisualTreeHelper.HitTest(TreeView, args.GetPosition(TreeView));
-            if (!(hit.VisualHit is TextBlock)) return;
+            if(MainViewModel.SelectedElementNode == null)
+                return;
 
             var settings = new MetroDialogSettings();
             switch (MainViewModel.SelectedElementNode.Type)
             {
-                case NodeViewModel.NodeType.Root:
-                    settings.DefaultText = "myApp";
-                    MainViewModel.ApplicationName = await this.ShowInputAsync("Change name", "App executable name\n'make sure to mach the *.exe name'", settings) ?? MainViewModel.ApplicationName;
-                    MainViewModel.TreeElements.First().Name = MainViewModel.ApplicationName;
-                    break;
                 case NodeViewModel.NodeType.Container:
                     settings.DefaultText = MainViewModel.SelectedElementNode.Name;
                     MainViewModel.SelectedElementNode.Name = await this.ShowInputAsync("Change node name", "Container name", settings) ?? MainViewModel.SelectedElementNode.Name;

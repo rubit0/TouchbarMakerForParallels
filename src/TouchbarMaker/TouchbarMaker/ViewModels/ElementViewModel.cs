@@ -2,10 +2,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ColorPickerWPF.Code;
+using Microsoft.Win32;
 using TouchbarMaker.Core;
 using TouchbarMaker.Tools;
 using Brush = System.Windows.Media.Brush;
@@ -168,6 +170,7 @@ namespace TouchbarMaker.ViewModels
         public ElementType Type { get; }
         public ICommand SetTitleColorCommand { get; set; }
         public ICommand SetBackgroundColorCommand { get; set; }
+        public ICommand AddIconCommand { get; set; }
 
         private readonly SolidColorBrush _disabledColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(232, 232, 232));
 
@@ -178,7 +181,7 @@ namespace TouchbarMaker.ViewModels
 
             SetTitleColorCommand = new Commander(o =>
             {
-                if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color, ColorPickerDialogOptions.SimpleView))
+                if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color, ColorPickerDialogOptions.None))
                 {
                     TextColor = Color.FromArgb(color.A, color.R, color.G, color.B);
                 }
@@ -190,9 +193,35 @@ namespace TouchbarMaker.ViewModels
 
             SetBackgroundColorCommand = new Commander(o =>
             {
-                if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color, ColorPickerDialogOptions.SimpleView))
+                if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color, ColorPickerDialogOptions.None))
                 {
                     BackgroundColor = Color.FromArgb(color.A, color.R, color.G, color.B);
+                }
+            }, o => true);
+
+
+            AddIconCommand = new Commander(o =>
+            {
+                var fileDialog = new OpenFileDialog
+                {
+                    Title = "Select a picture",
+                    Filter = "All supported graphics|*.jpg;*.jpeg;*.png;*.bmp|" +
+                             "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                             "Portable Network Graphic (*.png)|*.png"
+                };
+
+                if (fileDialog.ShowDialog() == true)
+                {
+                    var image = new BitmapImage(new Uri(fileDialog.FileName));
+
+                    if (!image.IsAcceptedIconSize())
+                    {
+                        MessageBox.Show("The image has a bad format.");
+                    }
+                    else
+                    {
+                        this.Icon = image;
+                    }
                 }
             }, o => true);
         }

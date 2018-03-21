@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using ColorPickerWPF.Code;
-using Microsoft.Win32;
-using TouchbarMaker.Core;
 
 namespace TouchbarMaker.ViewModels
 {
@@ -39,15 +33,12 @@ namespace TouchbarMaker.ViewModels
                 AddScrollViewCommand.CanExecute(this);
                 AddButtonCommand.CanExecute(this);
                 RemoveElementCommand.CanExecute(this);
-                AddElementIconCommand.CanExecute(this);
             }
         }
 
         public ICommand AddScrollViewCommand { get; set; }
         public ICommand AddButtonCommand { get; set; }
         public ICommand RemoveElementCommand { get; set; }
-        public ICommand AddElementIconCommand { get; set; }
-
 
         public MainViewModel(string appName)
         {
@@ -153,36 +144,6 @@ namespace TouchbarMaker.ViewModels
             {
                 var selected = SelectedElementNode;
                 return selected != null && selected.Type != NodeViewModel.NodeType.Root;
-            });
-
-            AddElementIconCommand = new Commander(o =>
-            {
-                var fileDialog = new OpenFileDialog
-                {
-                    Title = "Select a picture",
-                    Filter = "All supported graphics|*.jpg;*.jpeg;*.png;*.bmp|" +
-                             "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                             "Portable Network Graphic (*.png)|*.png"
-                };
-
-                if (fileDialog.ShowDialog() == true)
-                {
-                    var image = new BitmapImage(new Uri(fileDialog.FileName));
-
-                    if (!image.IsAcceptedIconSize())
-                    {
-                        MessageBox.Show("The image has a bad format.");
-                    }
-                    else
-                    {
-                        var selected = SelectedElementNode;
-                        selected.ElementContent.Icon = image;
-                    }
-                }
-            }, o =>
-            {
-                var selected = SelectedElementNode;
-                return selected != null && selected.Type == NodeViewModel.NodeType.Element;
             });
         }
     }

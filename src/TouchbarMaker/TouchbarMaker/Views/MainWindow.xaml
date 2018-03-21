@@ -65,15 +65,16 @@
                 <StackPanel >
                     <StackPanel Orientation="Horizontal" Margin="20">
                         <StackPanel Margin="10" MinHeight="100" Orientation="Vertical" VerticalAlignment="Bottom">
+                            <Label>Icon</Label>
                             <Image x:Name="Image" Margin="10 20 10 20" MinWidth="60" MinHeight="60" MaxHeight="120" MaxWidth="120" Width="60" Height="60" Source="{Binding SelectedElementNode.ElementContent.Icon}" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}" ToolTip="Select from file.">
+                                <Button Command="{Binding SelectedElementNode.ElementContent.AddIconCommand}" ToolTip="Select from file.">
                                     <iconPacks:PackIconMaterial Kind="FileImage" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 </Button>
-                                <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}" ToolTip="Select from templates.">
+                                <Button Command="{Binding SelectedElementNode.ElementContent.AddIconCommand}" ToolTip="Select from templates.">
                                     <iconPacks:PackIconMaterial Kind="Book" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 </Button>
-                                <Button Command="{Binding AddElementIconCommand, Mode=TwoWay}" ToolTip="Select from MacOS internal touchbar icons.">
+                                <Button Command="{Binding SelectedElementNode.ElementContent.AddIconCommand}" ToolTip="Select from MacOS internal touchbar icons.">
                                     <iconPacks:PackIconMaterial Kind="Apple" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 </Button>
                             </StackPanel>

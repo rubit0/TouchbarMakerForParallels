@@ -199,7 +199,6 @@ namespace TouchbarMaker.ViewModels
                 }
             }, o => true);
 
-
             AddIconCommand = new Commander(o =>
             {
                 var fileDialog = new OpenFileDialog
@@ -213,15 +212,7 @@ namespace TouchbarMaker.ViewModels
                 if (fileDialog.ShowDialog() == true)
                 {
                     var image = new BitmapImage(new Uri(fileDialog.FileName));
-
-                    if (!image.IsAcceptedIconSize())
-                    {
-                        MessageBox.Show("The image has a bad format.");
-                    }
-                    else
-                    {
-                        this.Icon = image;
-                    }
+                    this.Icon = image;
                 }
             }, o => true);
         }

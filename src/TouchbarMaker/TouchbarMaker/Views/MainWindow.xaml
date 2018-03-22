@@ -47,21 +47,20 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Background="#444444">
-                    <Button Background="Transparent" Margin="0 5" Command="{Binding AddButtonCommand}" ToolTip="Add button element" >
-                        <iconPacks:Modern Kind="InterfaceButton" Height="32" Width="32" />
+                <StackPanel Grid.Column="0"  Background="#D4D4D4">
+                    <Button Margin="0" Command="{Binding AddButtonCommand}" Height="52" ToolTip="Add button element" >
+                        <iconPacks:Modern Kind="InterfaceButton" Height="42" Width="32" />
                     </Button>
-                    <Separator/>
-                    <Button Background="Transparent" Margin="0 5" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Command="{Binding AddScrollViewCommand}" ToolTip="Add Scroll View container" >
-                        <!--Scroll-->
-                        <iconPacks:Modern Kind="List" Height="20" Width="20" />
+                    <Separator Width="42" Margin="0"/>
+                    <Button Margin="0" HorizontalContentAlignment="Center" Height="52" HorizontalAlignment="Stretch" Command="{Binding AddScrollViewCommand}" ToolTip="Add Scroll View container" >
+                        <iconPacks:Modern Kind="List" Height="40" Width="20" />
                     </Button>
-                    <Separator/>
-                    <Button Background="Transparent" Margin="0 5" Command="{Binding RemoveElementCommand}" >
-                        <iconPacks:PackIconMaterial Kind="Delete" Height="20" Width="20" />
+                    <Separator Width="42" Margin="0"/>
+                    <Button Margin="0" HorizontalContentAlignment="Center" Height="52" HorizontalAlignment="Stretch" Command="{Binding RemoveElementCommand}" >
+                        <iconPacks:PackIconMaterial Kind="Delete" Height="24" Width="20" />
                     </Button>
                 </StackPanel>
-                <TreeView Grid.Column="1" x:Name="TreeView" ItemsSource="{Binding TreeElements}" KeyDown="OnKeyPressedInTree">
+                <TreeView Background="#F2F2F2" Grid.Column="1" x:Name="TreeView" ItemsSource="{Binding TreeElements}" KeyDown="OnKeyPressedInTree">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Elements}" DataType="{x:Type models:NodeViewModel}" >
                             <Label Content="{Binding Name, Mode=TwoWay}"/>

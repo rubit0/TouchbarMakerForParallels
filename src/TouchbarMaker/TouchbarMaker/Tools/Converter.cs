@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using TouchbarMaker.Core;
 using TouchbarMaker.Core.Container;
 using TouchbarMaker.Core.Elements;
 using TouchbarMaker.ViewModels;
@@ -84,8 +85,28 @@ namespace TouchbarMaker.Tools
                 encoder.Save(stream);
                 var bitmap = new Bitmap(stream);
 
-                return new Bitmap(bitmap);
+                if (!bitmap.IsAcceptedIconSize())
+                {
+                    var size = ResizeFit(new Size(image.PixelWidth, image.PixelHeight), new Size(60, 60));
+                    return new Bitmap(bitmap, size);
+                }
+                else
+                {
+                    return new Bitmap(bitmap);
+                }
             }
+        }
+
+        // https://stackoverflow.com/a/17197425
+        private static Size ResizeFit(Size originalSize, Size maxSize)
+        {
+            var widthRatio = (double)maxSize.Width / (double)originalSize.Width;
+            var heightRatio = (double)maxSize.Height / (double)originalSize.Height;
+            var minAspectRatio = Math.Min(widthRatio, heightRatio);
+            if (minAspectRatio > 1)
+                return originalSize;
+
+            return new Size((int)(originalSize.Width * minAspectRatio), (int)(originalSize.Height * minAspectRatio));
         }
 
         private static BitmapEncoder GetEncoderFromFile(string extension)

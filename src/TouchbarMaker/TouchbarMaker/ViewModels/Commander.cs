@@ -33,5 +33,11 @@ namespace TouchbarMaker.ViewModels
             _execute = execute;
             _canExecuteAction = canExecuteAction;
         }
+
+        public Commander(Action<object> execute)
+        {
+            _execute = execute;
+            _canExecuteAction = o => true;
+        }
     }
 }

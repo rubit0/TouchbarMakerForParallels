@@ -33,6 +33,27 @@ namespace TouchbarMaker.Views
                 }
                 else
                 {
+                    //Check if is element
+                    if (MainViewModel.SelectedElementNode.Type == NodeViewModel.NodeType.Element)
+                    {
+                        NodeContentDisplay.Visibility = Visibility.Visible;
+
+                        if ((int) MainViewModel.SelectedElementNode.ElementContent.Type < 200)
+                        {
+                            DefaultNodeView.Visibility = Visibility.Visible;
+                            SpecialNodeView.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            DefaultNodeView.Visibility = Visibility.Hidden;
+                            SpecialNodeView.Visibility = Visibility.Visible;
+                            SpecialElementType.SelectedItem = SpecialElementType.Items[(int)MainViewModel.SelectedElementNode.ElementContent.Type - 200];
+                        }
+                    }
+                    else
+                    {
+                        NodeContentDisplay.Visibility = Visibility.Hidden;
+                    }
                     NodeContentDisplay.Visibility = MainViewModel.SelectedElementNode.Type == NodeViewModel.NodeType.Element
                         ? Visibility.Visible
                         : Visibility.Hidden;
@@ -133,6 +154,31 @@ namespace TouchbarMaker.Views
                 case NodeViewModel.NodeType.Element:
                     settings.DefaultText = MainViewModel.SelectedElementNode.Name;
                     MainViewModel.SelectedElementNode.Name = await this.ShowInputAsync("Change node name", "Element name", settings) ?? MainViewModel.SelectedElementNode.Name;
+                    break;
+            }
+        }
+
+        private void OnSpecialElementSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MainViewModel?.SelectedElementNode == null)
+                return;
+
+            var index = SpecialElementType.SelectedIndex;
+            switch (index)
+            {
+                case 0:
+                    MainViewModel.SelectedElementNode.ElementContent.Type = ElementViewModel.ElementType.Emoji;
+                    break;
+                case 1:
+                    MainViewModel.SelectedElementNode.ElementContent.Type = ElementViewModel.ElementType.FlexibleSpace;
+                    break;
+                case 2:
+                    MainViewModel.SelectedElementNode.ElementContent.Type = ElementViewModel.ElementType.SmallSpace;
+                    break;
+                case 3:
+                    MainViewModel.SelectedElementNode.ElementContent.Type = ElementViewModel.ElementType.LargeSpace;
+                    break;
+                default:
                     break;
             }
         }

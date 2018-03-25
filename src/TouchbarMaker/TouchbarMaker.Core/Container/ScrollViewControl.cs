@@ -7,7 +7,7 @@ namespace TouchbarMaker.Core.Container
     public class ScrollViewControl : ITouchbarElement
     {
         public string Id { get; set; }
-        public List<ITouchbarElement> ChildElements { get; set; } = new List<ITouchbarElement>();
+        public List<ButtonElement> ChildElements { get; set; } = new List<ButtonElement>();
 
         private const string ElementName = "ScrollView";
 

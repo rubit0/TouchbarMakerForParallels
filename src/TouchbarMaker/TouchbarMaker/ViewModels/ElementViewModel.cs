@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -21,7 +20,13 @@ namespace TouchbarMaker.ViewModels
 
         public enum ElementType
         {
-            Button
+            Button = 0,
+            PopoverTouchbar = 100,
+            PopverPressAndHold = 101,
+            Emoji = 200,
+            FlexibleSpace = 201,
+            SmallSpace = 202,
+            LargeSpace = 203
         }
 
         public string Id { get; }
@@ -167,7 +172,7 @@ namespace TouchbarMaker.ViewModels
         public Brush PreviewTitleColor { get; set; } = new SolidColorBrush(System.Windows.Media.Color.FromRgb(232, 232, 232));
         public Brush PreviewBackgroundColor { get; set; } = new SolidColorBrush(System.Windows.Media.Color.FromRgb(232, 232, 232));
 
-        public ElementType Type { get; }
+        public ElementType Type { get; set; }
         public ICommand SetTitleColorCommand { get; set; }
         public ICommand SetBackgroundColorCommand { get; set; }
         public ICommand AddIconCommand { get; set; }

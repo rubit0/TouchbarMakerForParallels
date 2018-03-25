@@ -51,9 +51,15 @@
                     <Button Margin="0" Command="{Binding AddButtonCommand}" Height="52" ToolTip="Add button element" >
                         <iconPacks:Modern Kind="InterfaceButton" Height="42" Width="32" />
                     </Button>
+                    <Button Margin="0" Command="{Binding AddSpecialElementCommand}" Height="52" ToolTip="Add special element" >
+                        Special
+                    </Button>
                     <Separator Width="42" Margin="0"/>
                     <Button Margin="0" HorizontalContentAlignment="Center" Height="52" HorizontalAlignment="Stretch" Command="{Binding AddScrollViewCommand}" ToolTip="Add Scroll View container" >
                         <iconPacks:Modern Kind="List" Height="40" Width="20" />
+                    </Button>
+                    <Button Margin="0" HorizontalContentAlignment="Center" Height="52" HorizontalAlignment="Stretch" Command="{Binding AddSegmentedControlCommand}" ToolTip="Add a Popover control" >
+                        Segmented
                     </Button>
                     <Separator Width="42" Margin="0"/>
                     <Button Margin="0" HorizontalContentAlignment="Center" Height="52" HorizontalAlignment="Stretch" Command="{Binding RemoveElementCommand}" >
@@ -70,7 +76,10 @@
             </Grid>
 
             <Grid x:Name="NodeContentDisplay" Grid.Column="1" >
-                <StackPanel >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel x:Name="DefaultNodeView"  Grid.Column="0">
                     <StackPanel Orientation="Horizontal" Margin="20">
                         <StackPanel Margin="10" MinHeight="100" Orientation="Vertical" VerticalAlignment="Bottom">
                             <Label>Icon</Label>
@@ -138,6 +147,15 @@
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="SpecialNodeView" Grid.Row="0" Margin="20" Orientation="Vertical" Visibility="Hidden">
+                    <Label>Sepcial</Label>
+                    <ComboBox x:Name="SpecialElementType" SelectionChanged="OnSpecialElementSelectionChanged" Width="120" HorizontalAlignment="Left">
+                        <ComboBoxItem IsSelected="True">Emoji</ComboBoxItem>
+                        <ComboBoxItem>Flexible Space</ComboBoxItem>
+                        <ComboBoxItem>Small Space</ComboBoxItem>
+                        <ComboBoxItem>Large Space</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
         </Grid>
